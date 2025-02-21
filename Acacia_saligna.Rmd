@@ -28,12 +28,39 @@ You can also embed plots, for example:
 
 ```{r pressure, echo=FALSE}
 plot(pressure)
-```
 
+read.csv
+AcaciaSaligna_Data <- read.csv("AcaciaSaligna.csv")
+library(dplyr)
+AcaciaSaligna_Data <- dplyr::select(Year, Vegetation_Type, Quadrat, Total_Number,
+Total_Density, Seedling_Number, Seedling_Density, Adult_Number, Adult_Density)
+AcaciaSaligna_Data <- read.table("AcaciaSaligna_Data.csv", header = TRUE, sep = ",", 
+						colClasses = c("NULL","integer", "character", "integer", "integer", "numeric", 
+										"integer", "numeric", "integer", "numeric", "NULL")) 
+
+# declaring a character vector 
+VegType_vec <- c("Strandveld", "Ecotone", "SandFynbos") 
+print("Original String") 
+print(VegType_vec) 
+
+# getting the class of vector 
+class(VegType_vec) 
+
+VegType_mod <- as.factor(VegType_vec) 
+print("Modified String") 
+print(VegType_mod) 
+
+# getting the class of vector 
+class(VegType_mod) 
+
+
+```
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 
-read_xlsx("AcaciaSaligna.xlsx", sheet = "Sites", range = "B1:J85")
 
-read.csv("AciaciaSaligna_Data.csv", sheet = "AcaciaSaligna_Data", range = "B1:J85")
+
+
+
+
 
