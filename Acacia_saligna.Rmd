@@ -31,3 +31,9 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+read_xlsx("AcaciaSaligna.xlsx", sheet = "Sites", range = "B1:J85")
+
+read.csv("AciaciaSaligna_Data.csv", sheet = "AcaciaSaligna_Data", range = "B1:J85")
+
