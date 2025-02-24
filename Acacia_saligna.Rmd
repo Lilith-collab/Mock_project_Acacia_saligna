@@ -30,7 +30,7 @@ You can also embed plots, for example:
 plot(pressure)
 
 read.csv
-AcaciaSaligna_Data <- read.csv("AcaciaSaligna.csv")
+AcaciaSaligna_Data <- read.csv("AcaciaSaligna_Data.csv")
 library(dplyr)
 AcaciaSaligna_Data <- dplyr::select(Year, Vegetation_Type, Quadrat, Total_Number,
 Total_Density, Seedling_Number, Seedling_Density, Adult_Number, Adult_Density)
@@ -52,6 +52,8 @@ print(VegType_mod)
 
 # getting the class of vector 
 class(VegType_mod) 
+
+library(ggplot2)
 
 
 ```
