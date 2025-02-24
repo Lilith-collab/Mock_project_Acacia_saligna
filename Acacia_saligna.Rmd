@@ -38,6 +38,13 @@ AcaciaSaligna_Data <- read.table("AcaciaSaligna_Data.csv", header = TRUE, sep = 
 						colClasses = c("NULL","integer", "character", "integer", "integer", "numeric", 
 										"integer", "numeric", "integer", "numeric", "NULL")) 
 
+names(AcaciaSaligna_Data)
+"Year" %in% names(AcaciaSaligna_Data)
+library(dplyr)
+AcaciaSaligna_Data %>% select(Year)  # Works in a tidyverse pipeline
+ls()  # Lists all objects in the environment
+
+
 # declaring a character vector 
 VegType_vec <- c("Strandveld", "Ecotone", "SandFynbos") 
 print("Original String") 
@@ -52,6 +59,28 @@ print(VegType_mod)
 
 # getting the class of vector 
 class(VegType_mod) 
+
+# CORRECTED convert character to factor
+data$Vegetation_Type <- as.factor(data$Vegetation_Type)
+
+class(data)
+
+my_data <- read.csv("AcaciaSaligna_Data.csv", stringsAsFactors = FALSE)
+my_data$Vegetation_Type <- as.factor(my_data$Vegetation_Type)
+
+str(my_data$Vegetation_Type)
+
+options("install.lock"=FALSE)
+
+install.packages("tidyr")
+
+library(tidyr)
+
+read.csv("AcaciaSaligna_Data.csv") %>%
+  pivot_longer(cols = c("Year", "Vegetation_Type", "Quadrat", "Total_Number",
+"Total_Density", "Seedling_Number", "Seedling_Density", "Adult_Number", 
+"Adult_Density"), names_to = "variable", values_to = "value") 
+
 
 library(ggplot2)
 
