@@ -29,41 +29,39 @@ You can also embed plots, for example:
 ```{r pressure, echo=FALSE}
 plot(pressure)
 
+# Install and load packages
 install.packages("tidyr")
 options("install.lock"=FALSE)
 library(tidyr)
+library(dplyr)
 library(ggplot2)
 
 # Read in data
-read.csv
 AcaciaSaligna_Data <- read.csv("AcaciaSaligna_Data.csv")
-library(dplyr)
-AcaciaSaligna_Data <- dplyr::select(Year, Vegetation_Type, Quadrat, Total_Number,
-Total_Density, Seedling_Number, Seedling_Density, Adult_Number, Adult_Density)
 
-# Delete the Area and Number_other_species
+# Remove columns Area and Number_other_species
 AcaciaSaligna_Data <- read.table("AcaciaSaligna_Data.csv", header = TRUE, 
                                  sep = ",", 
 		colClasses = c("NULL","integer", "character", "integer", "integer", 
 						               "numeric", 
 										"integer", "numeric", "integer", "numeric", "NULL")) 
 
+# DELETE?
 names(AcaciaSaligna_Data)
 "Year" %in% names(AcaciaSaligna_Data)
-library(dplyr)
+
 AcaciaSaligna_Data %>% select(Year)  # Works in a tidyverse pipeline
 ls()  # Lists all objects in the environment
 
 
 # Convert Vegetation_Type from character to factor
-AcaciaSaligna_Data$Vegetation_Type <- as.factor(AcaciaSaligna_Data$Vegetation_Type)
-class(AcaciaSaligna_Data$Vegetation_Type)
-
-str(my_data$Vegetation_Type)
+AcaciaSaligna_Data$Vegetation_Type <- 
+  as.factor(AcaciaSaligna_Data$Vegetation_Type)
+class(AcaciaSaligna_Data$Vegetation_Type) # Confirm new class
 
 # Convert Year from integer to factor
 AcaciaSaligna_Data$Year <- as.factor(AcaciaSaligna_Data$Year)
-class(Year)
+class(AcaciaSaligna_Data$Year)
 
 # Convert Quadrat from integer to factor
 AcaciaSaligna_Data$Quadrat <- as.factor(AcaciaSaligna_Data$Quadrat)
@@ -94,20 +92,15 @@ AcaciaSaligna_Data$Adult_Density <- as.factor(AcaciaSaligna_Data$Adult_Density)
 class(AcaciaSaligna_Data$Adult_Density)
 
 summary(AcaciaSaligna_Data)
-class(AcaciaSaligna_Data$Adult_Density)
-str(my_data$Year)
 
-# Convert data into long format
+# Convert data to long format
   long <- AcaciaSaligna_Data %>%
   pivot_longer(cols = c("Year", "Vegetation_Type", "Quadrat", "Total_Number",
 "Total_Density", "Seedling_Number", "Seedling_Density", "Adult_Number", 
 "Adult_Density"), names_to = "variable", values_to = "value") 
-  
-class(AcaciaSaligna_Data$Year)
-class(AcaciaSaligna_Data$Vegetation_Type)
-class(AcaciaSaligna_Data$Total_Density)
 
-# NEU nur die nötigen 4 in pivoT longer umwandeln
+# Only convert the four variables to long format
+  # Reshape from wide format to long format and make a boxplot 
   AcaciaSaligna_Data %>%
 pivot_longer(cols = c("Seedling_Number", "Seedling_Density", "Adult_Number", "Adult_Density"),
                names_to = "variable", values_to = "value") %>%
@@ -115,39 +108,6 @@ pivot_longer(cols = c("Seedling_Number", "Seedling_Density", "Adult_Number", "Ad
     geom_boxplot(aes(y = value, x = Vegetation_Type)) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     facet_wrap(vars(variable), scales = "free")
-  
-  install.packages(ggplot)
-  library(ggplot2)
-
-  # AB HIER KANN ICH LÖSCHEN
-# NEW Attempt to convert all columns to factor values
-library(tidyr)
-library(dplyr)
-
-# Read the dataset into a variable and convert necessary columns
-my_data <- read.csv("AcaciaSaligna_Data.csv", stringsAsFactors = FALSE) %>%
-  mutate(
-    Year = as.factor(Year), 
-    Vegetation_Type = as.factor(Vegetation_Type)
-  )
-
-# Pivot the dataset to long format
-long_data <- my_data %>%
-  pivot_longer(
-    cols = everything(),   
-    names_to = "variable", 
-    values_to = "value"
-  )
-
-# Check the structure
-str(long_data)
-
-
-
-
-
-
-
 
 ```
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
