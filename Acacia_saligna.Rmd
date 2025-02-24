@@ -29,13 +29,23 @@ You can also embed plots, for example:
 ```{r pressure, echo=FALSE}
 plot(pressure)
 
+install.packages("tidyr")
+options("install.lock"=FALSE)
+library(tidyr)
+library(ggplot2)
+
+# Read in data
 read.csv
 AcaciaSaligna_Data <- read.csv("AcaciaSaligna_Data.csv")
 library(dplyr)
 AcaciaSaligna_Data <- dplyr::select(Year, Vegetation_Type, Quadrat, Total_Number,
 Total_Density, Seedling_Number, Seedling_Density, Adult_Number, Adult_Density)
-AcaciaSaligna_Data <- read.table("AcaciaSaligna_Data.csv", header = TRUE, sep = ",", 
-						colClasses = c("NULL","integer", "character", "integer", "integer", "numeric", 
+
+# Delete the Area and Number_other_species
+AcaciaSaligna_Data <- read.table("AcaciaSaligna_Data.csv", header = TRUE, 
+                                 sep = ",", 
+		colClasses = c("NULL","integer", "character", "integer", "integer", 
+						               "numeric", 
 										"integer", "numeric", "integer", "numeric", "NULL")) 
 
 names(AcaciaSaligna_Data)
@@ -45,44 +55,98 @@ AcaciaSaligna_Data %>% select(Year)  # Works in a tidyverse pipeline
 ls()  # Lists all objects in the environment
 
 
-# declaring a character vector 
-VegType_vec <- c("Strandveld", "Ecotone", "SandFynbos") 
-print("Original String") 
-print(VegType_vec) 
-
-# getting the class of vector 
-class(VegType_vec) 
-
-VegType_mod <- as.factor(VegType_vec) 
-print("Modified String") 
-print(VegType_mod) 
-
-# getting the class of vector 
-class(VegType_mod) 
-
-# CORRECTED convert character to factor
-data$Vegetation_Type <- as.factor(data$Vegetation_Type)
-
-class(data)
-
-my_data <- read.csv("AcaciaSaligna_Data.csv", stringsAsFactors = FALSE)
-my_data$Vegetation_Type <- as.factor(my_data$Vegetation_Type)
+# Convert Vegetation_Type from character to factor
+AcaciaSaligna_Data$Vegetation_Type <- as.factor(AcaciaSaligna_Data$Vegetation_Type)
+class(AcaciaSaligna_Data$Vegetation_Type)
 
 str(my_data$Vegetation_Type)
 
-options("install.lock"=FALSE)
+# Convert Year from integer to factor
+AcaciaSaligna_Data$Year <- as.factor(AcaciaSaligna_Data$Year)
+class(Year)
 
-install.packages("tidyr")
+# Convert Quadrat from integer to factor
+AcaciaSaligna_Data$Quadrat <- as.factor(AcaciaSaligna_Data$Quadrat)
+class(AcaciaSaligna_Data$Quadrat)
 
-library(tidyr)
+# Convert Total_Number from integer to factor
+AcaciaSaligna_Data$Total_Number <- as.factor(AcaciaSaligna_Data$Total_Number)
+class(AcaciaSaligna_Data$Total_Number)
 
-read.csv("AcaciaSaligna_Data.csv") %>%
+# Convert Total_Density from double to factor
+AcaciaSaligna_Data$Total_Density <- as.factor(AcaciaSaligna_Data$Total_Density)
+class(AcaciaSaligna_Data$Total_Density)
+
+# Convert Seedling_Number from integer to factor
+AcaciaSaligna_Data$Seedling_Number <- as.factor(AcaciaSaligna_Data$Seedling_Number)
+class(AcaciaSaligna_Data$Seedling_Number)
+
+# Convert Seedling_Density from double to factor
+AcaciaSaligna_Data$Seedling_Density <- as.factor(AcaciaSaligna_Data$Seedling_Density)
+class(AcaciaSaligna_Data$Seedling_Density)
+
+# Convert Adult_Number from integer to factor
+AcaciaSaligna_Data$Adult_Number <- as.factor(AcaciaSaligna_Data$Adult_Number)
+class(AcaciaSaligna_Data$Adult_Number)
+
+# Convert Adult_Density from double to factor
+AcaciaSaligna_Data$Adult_Density <- as.factor(AcaciaSaligna_Data$Adult_Density)
+class(AcaciaSaligna_Data$Adult_Density)
+
+summary(AcaciaSaligna_Data)
+class(AcaciaSaligna_Data$Adult_Density)
+str(my_data$Year)
+
+# Convert data into long format
+  long <- AcaciaSaligna_Data %>%
   pivot_longer(cols = c("Year", "Vegetation_Type", "Quadrat", "Total_Number",
 "Total_Density", "Seedling_Number", "Seedling_Density", "Adult_Number", 
 "Adult_Density"), names_to = "variable", values_to = "value") 
+  
+class(AcaciaSaligna_Data$Year)
+class(AcaciaSaligna_Data$Vegetation_Type)
+class(AcaciaSaligna_Data$Total_Density)
+
+# NEU nur die nötigen 4 in pivoT longer umwandeln
+  AcaciaSaligna_Data %>%
+pivot_longer(cols = c("Seedling_Number", "Seedling_Density", "Adult_Number", "Adult_Density"),
+               names_to = "variable", values_to = "value") %>%
+  ggplot() +
+    geom_boxplot(aes(y = value, x = Vegetation_Type)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    facet_wrap(vars(variable), scales = "free")
+  
+  install.packages(ggplot)
+  library(ggplot2)
+
+  # AB HIER KANN ICH LÖSCHEN
+# NEW Attempt to convert all columns to factor values
+library(tidyr)
+library(dplyr)
+
+# Read the dataset into a variable and convert necessary columns
+my_data <- read.csv("AcaciaSaligna_Data.csv", stringsAsFactors = FALSE) %>%
+  mutate(
+    Year = as.factor(Year), 
+    Vegetation_Type = as.factor(Vegetation_Type)
+  )
+
+# Pivot the dataset to long format
+long_data <- my_data %>%
+  pivot_longer(
+    cols = everything(),   
+    names_to = "variable", 
+    values_to = "value"
+  )
+
+# Check the structure
+str(long_data)
 
 
-library(ggplot2)
+
+
+
+
 
 
 ```
