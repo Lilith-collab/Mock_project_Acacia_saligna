@@ -26,12 +26,12 @@ summary(cars)
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
+```{r pressure, echo=TRUE}
 plot(pressure)
 
 # Install and load packages
-install.packages("tidyr")
-options("install.lock"=FALSE)
+#install.packages("tidyr")
+#options("install.lock"=FALSE)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
