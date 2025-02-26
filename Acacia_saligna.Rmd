@@ -1,121 +1,164 @@
 ---
-title: "Mock_project_Acacia_saligna"
+title: "Acacia_saligna"
 author: "Lilith Diener"
 date: "2025-02-21"
 output: html_document
 ---
-```{r}
-
-```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Temporal assessment of the density and population structure of Acacia saligna in the Cape Flats Nature Reserve
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Invasive alien plants pose a serious threat to native vegetation. Knowledge of 
+changes in the density of invaders is thus crucial to evaluate the effectiveness
+of eradication methods. Research on the population density and structure of 
+Acacia saligna was conducted between 2019 and 2024 in a previously burnt section 
+of the Cape Flats Nature Reserve, and its impact on the local plant species 
+richness determined. In seven 4mx4m quadrats each, the number of A. saligna 
+individuals was recorded in three areas across the reserve (Ecotone, Sand Fynbos,
+Strandveld). A. saligna plants were cleared and a decline in the population's 
+average density was observed.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=TRUE}
-plot(pressure)
+```{r, echo=TRUE}
 
 # Install and load packages
-#install.packages("tidyr")
-#options("install.lock"=FALSE)
+# install.packages("tidyr")
+# options("install.lock"=FALSE)
+# install.packages("ggplot2")
+# options("install.lock"=FALSE)
+install.packages("htmltools")
+options("install.lock"=FALSE)
+
+library(htmltools)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
+```
 
-# Read in data
+Read in the dataset
+
+```{r, echo=TRUE}
 AcaciaSaligna_Data <- read.csv("AcaciaSaligna_Data.csv")
+```
 
-# Remove columns Area and Number_other_species
+Remove the columns "Area" and "Number_other_species" from the dataset
+
+```{r, echo=TRUE}
 AcaciaSaligna_Data <- read.table("AcaciaSaligna_Data.csv", header = TRUE, 
                                  sep = ",", 
 		colClasses = c("NULL","integer", "character", "integer", "integer", 
 						               "numeric", 
 										"integer", "numeric", "integer", "numeric", "NULL")) 
+```
 
-# DELETE?
-names(AcaciaSaligna_Data)
-"Year" %in% names(AcaciaSaligna_Data)
+Convert all variables to factor values and confirm the new class
 
-AcaciaSaligna_Data %>% select(Year)  # Works in a tidyverse pipeline
-ls()  # Lists all objects in the environment
-
-
-# Convert Vegetation_Type from character to factor
+```{r, echo=TRUE}
 AcaciaSaligna_Data$Vegetation_Type <- 
   as.factor(AcaciaSaligna_Data$Vegetation_Type)
-class(AcaciaSaligna_Data$Vegetation_Type) # Confirm new class
+class(AcaciaSaligna_Data$Vegetation_Type)
 
-# Convert Year from integer to factor
 AcaciaSaligna_Data$Year <- as.factor(AcaciaSaligna_Data$Year)
 class(AcaciaSaligna_Data$Year)
 
-# Convert Quadrat from integer to factor
 AcaciaSaligna_Data$Quadrat <- as.factor(AcaciaSaligna_Data$Quadrat)
 class(AcaciaSaligna_Data$Quadrat)
 
-# Convert Total_Number from integer to factor
 AcaciaSaligna_Data$Total_Number <- as.factor(AcaciaSaligna_Data$Total_Number)
 class(AcaciaSaligna_Data$Total_Number)
 
-# Convert Total_Density from double to factor
 AcaciaSaligna_Data$Total_Density <- as.factor(AcaciaSaligna_Data$Total_Density)
 class(AcaciaSaligna_Data$Total_Density)
 
-# Convert Seedling_Number from integer to factor
 AcaciaSaligna_Data$Seedling_Number <- as.factor(AcaciaSaligna_Data$Seedling_Number)
 class(AcaciaSaligna_Data$Seedling_Number)
 
-# Convert Seedling_Density from double to factor
 AcaciaSaligna_Data$Seedling_Density <- as.factor(AcaciaSaligna_Data$Seedling_Density)
 class(AcaciaSaligna_Data$Seedling_Density)
 
-# Convert Adult_Number from integer to factor
 AcaciaSaligna_Data$Adult_Number <- as.factor(AcaciaSaligna_Data$Adult_Number)
 class(AcaciaSaligna_Data$Adult_Number)
 
-# Convert Adult_Density from double to factor
 AcaciaSaligna_Data$Adult_Density <- as.factor(AcaciaSaligna_Data$Adult_Density)
 class(AcaciaSaligna_Data$Adult_Density)
 
 summary(AcaciaSaligna_Data)
+```
 
-# Convert data to long format
+Convert the whole dataset from wide to long format
+
+```{r, echo=TRUE}
   long <- AcaciaSaligna_Data %>%
   pivot_longer(cols = c("Year", "Vegetation_Type", "Quadrat", "Total_Number",
 "Total_Density", "Seedling_Number", "Seedling_Density", "Adult_Number", 
 "Adult_Density"), names_to = "variable", values_to = "value") 
+```
 
-# Only convert the four variables to long format
-  # Reshape from wide format to long format and make a boxplot 
-  AcaciaSaligna_Data %>%
-pivot_longer(cols = c("Seedling_Number", "Seedling_Density", "Adult_Number", "Adult_Density"),
-               names_to = "variable", values_to = "value") %>%
-  ggplot() +
-    geom_boxplot(aes(y = value, x = Vegetation_Type)) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    facet_wrap(vars(variable), scales = "free")
+Convert only the variables to plot from wide format to long format and make a boxplot
+LÖSCHEN??
+
+```{r, echo=TRUE}
+# Convert factor columns to numeric
+AcaciaSaligna_Data <- AcaciaSaligna_Data %>%
+  mutate(
+    Total_Density = as.numeric(as.character(Total_Density)),
+    Seedling_Density = as.numeric(as.character(Seedling_Density)),
+    Adult_Density = as.numeric(as.character(Adult_Density))
+  )
+
+str(AcaciaSaligna_Data)
+
+# Calculate average densities for each year
+summary_data <- AcaciaSaligna_Data %>%
+  group_by(Year) %>%
+  summarise(
+    Total_Density = mean(Total_Density, na.rm = TRUE),
+    Seedling_Density = mean(Seedling_Density, na.rm = TRUE),
+    Adult_Density = mean(Adult_Density, na.rm = TRUE)
+  )
+
+
+# Reshape data to long format
+summary_data_long <- summary_data %>%
+  pivot_longer(cols = c(Total_Density, Seedling_Density, Adult_Density),
+               names_to = "Group",
+               values_to = "Avg_Density")
+
+# Check structure
+print(summary_data_long)
+
+
+# Calculate Averages 
+summary_data <- AcaciaSaligna_Data %>%
+  group_by(Year, Vegetation_Type) %>%
+  summarise(
+    Total_Density = mean(Total_Density, na.rm = TRUE),
+    Seedling_Density = mean(Seedling_Density, na.rm = TRUE),
+    Adult_Density = mean(Adult_Density, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  pivot_longer(cols = c(Total_Density, Seedling_Density, Adult_Density),
+               names_to = "Group",
+               values_to = "Avg_Density")
+
+# Plot bar charts 
+ggplot(summary_data, aes(x = factor(Year), y = Avg_Density, fill = Group)) + 
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.6) +  # Adjust bar width and spacing
+  facet_wrap(~Vegetation_Type, ncol = 1) +  
+  labs(x = "Year", y = "Average Species Density", fill = "Density Type") + 
+  theme_minimal() +  
+  scale_fill_manual(values = c("Total_Density" = "black", 
+                               "Seedling_Density" = "grey", 
+                               "Adult_Density" = "grey39")) +  
+  theme(text = element_text(size = 12), 
+        strip.text = element_text(size = 12),  
+        axis.text.x = element_text(angle = 45, hjust = 1))  
 
 ```
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
-
-
-
-
-
+HIER FIGURE CAPTION EINFÜGEN UND ERKLÄREN DASS IN MANCHEN AREAS IN MANCHEN 
+JAHREN NICHT GESAMPLED WURDE
 
 
