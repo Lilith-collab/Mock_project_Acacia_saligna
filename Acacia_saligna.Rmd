@@ -28,10 +28,7 @@ average density was observed.
 # options("install.lock"=FALSE)
 # install.packages("ggplot2")
 # options("install.lock"=FALSE)
-install.packages("htmltools")
-options("install.lock"=FALSE)
 
-library(htmltools)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
@@ -85,15 +82,6 @@ AcaciaSaligna_Data$Adult_Density <- as.factor(AcaciaSaligna_Data$Adult_Density)
 class(AcaciaSaligna_Data$Adult_Density)
 
 summary(AcaciaSaligna_Data)
-```
-
-Convert the whole dataset from wide to long format
-
-```{r, echo=TRUE}
-  long <- AcaciaSaligna_Data %>%
-  pivot_longer(cols = c("Year", "Vegetation_Type", "Quadrat", "Total_Number",
-"Total_Density", "Seedling_Number", "Seedling_Density", "Adult_Number", 
-"Adult_Density"), names_to = "variable", values_to = "value") 
 ```
 
 Convert only the variables to plot from wide format to long format and make a boxplot
