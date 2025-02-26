@@ -67,6 +67,15 @@ AcaciaSaligna_Data <- AcaciaSaligna_Data %>%
     Adult_Density = as.numeric(as.character(Adult_Density))
   )
 
+str(AcaciaSaligna_Data)
+
+# Calculate average densities for each year
+summary_data <- AcaciaSaligna_Data %>%
+group_by(Year) %>%
+summarise(Total_Density = mean(Total_Density, na.rm = TRUE),
+Seedling_Density = mean(Seedling_Density, na.rm = TRUE),
+Adult_Density = mean(Adult_Density, na.rm = TRUE))
+
 str(AcaciaSaligna_Data) # Check structure of data
 ```
 
