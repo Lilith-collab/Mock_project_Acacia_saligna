@@ -50,42 +50,6 @@ AcaciaSaligna_Data <- read.table("AcaciaSaligna_Data.csv", header = TRUE,
 										"integer", "numeric", "integer", "numeric", "NULL")) 
 ```
 
-Convert all variables to factor values and confirm the new class
-
-```{r, echo=TRUE}
-AcaciaSaligna_Data$Vegetation_Type <- 
-  as.factor(AcaciaSaligna_Data$Vegetation_Type)
-class(AcaciaSaligna_Data$Vegetation_Type)
-
-AcaciaSaligna_Data$Year <- as.factor(AcaciaSaligna_Data$Year)
-class(AcaciaSaligna_Data$Year)
-
-AcaciaSaligna_Data$Quadrat <- as.factor(AcaciaSaligna_Data$Quadrat)
-class(AcaciaSaligna_Data$Quadrat)
-
-AcaciaSaligna_Data$Total_Number <- as.factor(AcaciaSaligna_Data$Total_Number)
-class(AcaciaSaligna_Data$Total_Number)
-
-AcaciaSaligna_Data$Total_Density <- as.factor(AcaciaSaligna_Data$Total_Density)
-class(AcaciaSaligna_Data$Total_Density)
-
-AcaciaSaligna_Data$Seedling_Number <- as.factor(AcaciaSaligna_Data$Seedling_Number)
-class(AcaciaSaligna_Data$Seedling_Number)
-
-AcaciaSaligna_Data$Seedling_Density <- as.factor(AcaciaSaligna_Data$Seedling_Density)
-class(AcaciaSaligna_Data$Seedling_Density)
-
-AcaciaSaligna_Data$Adult_Number <- as.factor(AcaciaSaligna_Data$Adult_Number)
-class(AcaciaSaligna_Data$Adult_Number)
-
-AcaciaSaligna_Data$Adult_Density <- as.factor(AcaciaSaligna_Data$Adult_Density)
-class(AcaciaSaligna_Data$Adult_Density)
-
-summary(AcaciaSaligna_Data)
-```
-
-
-
 ```{r, echo=TRUE}
 # Convert factor columns to numeric
 AcaciaSaligna_Data <- AcaciaSaligna_Data %>%
