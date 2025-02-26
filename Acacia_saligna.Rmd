@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Temporal assessment of the density and population structure of Acacia saligna 
-in the Cape Flats Nature Reserve
+## in the Cape Flats Nature Reserve
 
 Invasive alien plants pose a serious threat to native vegetation. Knowledge of 
 changes in the density of invaders is thus crucial to evaluate the effectiveness
@@ -37,7 +37,7 @@ library(dplyr)
 library(ggplot2)
 ```
 
-Now, we are can proceed to read in the dataset using read.csv().
+Now, we can proceed to read in the dataset using read.csv().
 
 ```{r, echo=TRUE}
 AcaciaSaligna_Data <- read.csv("AcaciaSaligna_Data.csv")
