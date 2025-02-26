@@ -68,7 +68,13 @@ AcaciaSaligna_Data <- AcaciaSaligna_Data %>%
   )
 
 str(AcaciaSaligna_Data)
+```
 
+In the last few steps, I calculated the average total, adult, and seedling
+densities for each year and vegetation type. I also put the data into long 
+format using pivot_longer().
+
+```{r, echo=TRUE}
 # Calculate average densities for each year
 summary_data <- AcaciaSaligna_Data %>%
 group_by(Year) %>%
@@ -77,14 +83,8 @@ Seedling_Density = mean(Seedling_Density, na.rm = TRUE),
 Adult_Density = mean(Adult_Density, na.rm = TRUE))
 
 str(AcaciaSaligna_Data) # Check structure of data
-```
 
-In the last few steps, I calculated the average total, adult, and seedling
-densities for each year and vegetation type. I also put the data into long 
-format using pivot_longer().
-
-```{r, echo=TRUE}
-# Calculate average densities 
+# Calculate average densities for each year and vegetation type
 summary_data <- AcaciaSaligna_Data %>%
   group_by(Year, Vegetation_Type) %>%
   summarise(
@@ -96,15 +96,6 @@ summary_data <- AcaciaSaligna_Data %>%
   pivot_longer(cols = c(Total_Density, Seedling_Density, Adult_Density),
                names_to = "Group",
                values_to = "Avg_Density")
-
-# Reshape data to long format
-summary_data_long <- summary_data %>%
-  pivot_longer(cols = c(Total_Density, Seedling_Density, Adult_Density),
-               names_to = "Group",
-               values_to = "Avg_Density")
-
-# Check structure
-print(summary_data_long)
 ```
 
 Finally, I created three bar charts showing changes in the average total, 
@@ -128,31 +119,5 @@ ggplot(summary_data, aes(x = factor(Year), y = Avg_Density, fill = Group)) +
 ```
 
 
-```{r, echo=TRUE}
-summary_data <- read.csv("AcaciaSaligna_Data.csv", stringsAsFactors = FALSE)
 
-# Check column names to ensure they match expectations
-colnames(summary_data)
-
-# Check structure of the data
-str(summary_data)
-
-# Reshape Data (Pivot to Long Format)
-summary_data_long <- summary_data %>%
-  pivot_longer(cols = c(Total_Density, Seedling_Density, Adult_Density),  # Ensure these column names exist
-               names_to = "Group",
-               values_to = "Avg_Density")
-
-# Create the Grouped Bar Graph
-ggplot(summary_data_long, aes(x = as.factor(Year), y = Avg_Density, fill = Group)) +
-  geom_bar(stat = "identity", position = "dodge") +  # Dodge for grouped bars
-  facet_wrap(~ Area) +  # Separate plots for each habitat type
-  labs(title = "Changes in Acacia saligna Density (2019-2024)",
-       x = "Year",
-       y = "Average Density (per m²)",
-       fill = "Density Type") +
-  theme_minimal() +
-  scale_fill_manual(values = c("Total_Density" = "black", 
-                               "Seedling_Density" = "grey", 
-                               "Adult_Density" = "grey39")) 
 
