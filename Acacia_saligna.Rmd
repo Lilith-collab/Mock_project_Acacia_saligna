@@ -9,7 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Temporal assessment of the density and population structure of Acacia saligna in the Cape Flats Nature Reserve
+## Temporal assessment of the density and population structure of Acacia saligna 
+in the Cape Flats Nature Reserve
 
 Invasive alien plants pose a serious threat to native vegetation. Knowledge of 
 changes in the density of invaders is thus crucial to evaluate the effectiveness
@@ -17,12 +18,14 @@ of eradication methods. Research on the population density and structure of
 Acacia saligna was conducted between 2019 and 2024 in a previously burnt section 
 of the Cape Flats Nature Reserve, and its impact on the local plant species 
 richness determined. In seven 4mx4m quadrats each, the number of A. saligna 
-individuals was recorded in three areas across the reserve (Ecotone, Sand Fynbos,
-Strandveld). A. saligna plants were cleared and a decline in the population's 
-average density was observed.
+individuals was recorded in three areas across the reserve (Ecotone, 
+Sand Fynbos, Strandveld). A. saligna plants were cleared and a decline in the 
+population's average density was observed.
+
+Let us start with the coding... Firstly, we are installing and loading all
+necessary packages using the library() function.
 
 ```{r, echo=TRUE}
-
 # Install and load packages
 # install.packages("tidyr")
 # options("install.lock"=FALSE)
@@ -34,13 +37,15 @@ library(dplyr)
 library(ggplot2)
 ```
 
-Read in the dataset
+Now, we are can proceed to read in the dataset using read.csv().
 
 ```{r, echo=TRUE}
 AcaciaSaligna_Data <- read.csv("AcaciaSaligna_Data.csv")
 ```
 
-Remove the columns "Area" and "Number_other_species" from the dataset
+I removed the columns "Area" and "Number_other_species" from the dataset as 
+they are not needed for this analysis. Note that these two columns are marked
+as "NULL".
 
 ```{r, echo=TRUE}
 AcaciaSaligna_Data <- read.table("AcaciaSaligna_Data.csv", header = TRUE, 
@@ -49,6 +54,9 @@ AcaciaSaligna_Data <- read.table("AcaciaSaligna_Data.csv", header = TRUE,
 						               "numeric", 
 										"integer", "numeric", "integer", "numeric", "NULL")) 
 ```
+
+Here, I converted all the densities in the dataset to numeric values and 
+verified the output using str().
 
 ```{r, echo=TRUE}
 # Convert factor columns to numeric
@@ -59,18 +67,14 @@ AcaciaSaligna_Data <- AcaciaSaligna_Data %>%
     Adult_Density = as.numeric(as.character(Adult_Density))
   )
 
-str(AcaciaSaligna_Data)
+str(AcaciaSaligna_Data) # Check structure of data
+```
 
-# Calculate average densities for each year
-summary_data <- AcaciaSaligna_Data %>%
-  group_by(Year) %>%
-  summarise(
-    Total_Density = mean(Total_Density, na.rm = TRUE),
-    Seedling_Density = mean(Seedling_Density, na.rm = TRUE),
-    Adult_Density = mean(Adult_Density, na.rm = TRUE)
-  )
+In the last few steps, I calculated the average total, adult, and seedling
+densities for each year and vegetation type. I also put the data into long 
+format using pivot_longer().
 
-
+```{r, echo=TRUE}
 # Reshape data to long format
 summary_data_long <- summary_data %>%
   pivot_longer(cols = c(Total_Density, Seedling_Density, Adult_Density),
@@ -80,8 +84,7 @@ summary_data_long <- summary_data %>%
 # Check structure
 print(summary_data_long)
 
-
-# Calculate Averages 
+# Calculate average densities 
 summary_data <- AcaciaSaligna_Data %>%
   group_by(Year, Vegetation_Type) %>%
   summarise(
@@ -93,10 +96,17 @@ summary_data <- AcaciaSaligna_Data %>%
   pivot_longer(cols = c(Total_Density, Seedling_Density, Adult_Density),
                names_to = "Group",
                values_to = "Avg_Density")
+```
 
+Finally, I created three bar charts showing changes in the average total, 
+seedling and adult density of A. saligna per square meter in each area from 2019 
+to 2024. Please note that the Ecotone and Sand Fynbos areas were only sampled in 
+some of the years. 
+
+```{r, echo=TRUE}
 # Plot bar charts 
 ggplot(summary_data, aes(x = factor(Year), y = Avg_Density, fill = Group)) + 
-  geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.6) +  # Adjust bar width and spacing
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.6) + 
   facet_wrap(~Vegetation_Type, ncol = 1) +  
   labs(x = "Year", y = "Average Species Density", fill = "Density Type") + 
   theme_minimal() +  
@@ -106,10 +116,4 @@ ggplot(summary_data, aes(x = factor(Year), y = Avg_Density, fill = Group)) +
   theme(text = element_text(size = 12), 
         strip.text = element_text(size = 12),  
         axis.text.x = element_text(angle = 45, hjust = 1))  
-
 ```
-
-HIER FIGURE CAPTION EINFÜGEN UND ERKLÄREN DASS IN MANCHEN AREAS IN MANCHEN 
-JAHREN NICHT GESAMPLED WURDE
-
-
