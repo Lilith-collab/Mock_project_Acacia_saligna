@@ -84,8 +84,7 @@ class(AcaciaSaligna_Data$Adult_Density)
 summary(AcaciaSaligna_Data)
 ```
 
-Convert only the variables to plot from wide format to long format and make a boxplot
-LÖSCHEN??
+
 
 ```{r, echo=TRUE}
 # Convert factor columns to numeric
