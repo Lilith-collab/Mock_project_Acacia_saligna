@@ -118,6 +118,6 @@ ggplot(summary_data, aes(x = factor(Year), y = Avg_Density, fill = Group)) +
         axis.text.x = element_text(angle = 45, hjust = 1))  
 ```
 
-
+Figure 1: Bar graphs showing changes in the average total, seedling and adult density of A. saligna per square meter in the three areas from 2019 to 2024.
 
 
